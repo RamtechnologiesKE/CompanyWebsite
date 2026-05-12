@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useDemoModal } from "@/context/DemoModalContext";
 
 export function CTA() {
+  const { openModal } = useDemoModal();
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -42,7 +45,8 @@ export function CTA() {
             <Button 
               size="lg" 
               className="bg-accent hover:bg-accent/90 text-white h-14 px-8 text-base rounded-full shadow-[0_8px_30px_rgb(249,115,22,0.3)]"
-              onClick={() => scrollTo("contact")}
+              onClick={openModal}
+              data-testid="button-request-demo-cta"
             >
               Request Consultation
               <ArrowRight className="w-5 h-5 ml-2" />

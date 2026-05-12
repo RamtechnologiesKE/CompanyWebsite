@@ -5,6 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
+import { DemoModal } from "@/components/DemoModal";
+import { DemoModalProvider } from "@/context/DemoModalContext";
 
 const queryClient = new QueryClient();
 
@@ -21,11 +23,14 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-        </WouterRouter>
-        <WhatsAppWidget />
-        <Toaster />
+        <DemoModalProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <Router />
+          </WouterRouter>
+          <DemoModal />
+          <WhatsAppWidget />
+          <Toaster />
+        </DemoModalProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
-import { ArrowRight, MessageCircle, PlayCircle } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useDemoModal } from "@/context/DemoModalContext";
 
 import heroBg from "@/assets/images/hero-school.jpg";
 
 export function Hero() {
+  const { openModal } = useDemoModal();
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -68,7 +71,8 @@ export function Hero() {
             <Button 
               size="lg" 
               className="bg-accent hover:bg-accent/90 text-white h-14 px-8 text-base rounded-full shadow-[0_8px_30px_rgb(249,115,22,0.3)]"
-              onClick={() => scrollTo("contact")}
+              onClick={openModal}
+              data-testid="button-request-demo-hero"
             >
               Request a Demo
               <ArrowRight className="w-5 h-5 ml-2" />
