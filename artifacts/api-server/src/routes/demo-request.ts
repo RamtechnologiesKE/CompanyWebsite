@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Resend } from "resend";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 const router = Router();
 
@@ -8,7 +8,7 @@ const demoRequestSchema = z.object({
   name: z.string().min(2),
   organization: z.string().min(2),
   phone: z.string().min(9),
-  email: z.email(),
+  email: z.string().email(),
   service: z.string().min(1),
 });
 
@@ -31,7 +31,7 @@ router.post("/demo-request", async (req, res) => {
   const resend = new Resend(apiKey);
 
   const { error } = await resend.emails.send({
-    from: "Ramtechnologies Website <onboarding@resend.dev>",
+    from: "Ramtechnologies Website <demo@ramtechnologies.co.ke>",
     to: ["demo@ramtechnologies.co.ke"],
     replyTo: email,
     subject: `New Demo Request — ${service}`,
