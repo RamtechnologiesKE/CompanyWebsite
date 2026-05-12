@@ -84,7 +84,7 @@ export function Hero() {
             </Button>
 
             <a 
-              href="https://wa.me/254" 
+              href="https://wa.me/254721934498" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center h-14 px-8 text-base font-medium rounded-full bg-green-500 hover:bg-green-600 text-white transition-colors"
