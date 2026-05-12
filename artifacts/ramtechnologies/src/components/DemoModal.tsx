@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { ArrowRight, X, CalendarCheck } from "lucide-react";
+import { ArrowRight, X, CalendarCheck, Loader2 } from "lucide-react";
 import { useDemoModal } from "@/context/DemoModalContext";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -46,20 +47,37 @@ type FormValues = z.infer<typeof formSchema>;
 export function DemoModal() {
   const { open, closeModal } = useDemoModal();
   const { toast } = useToast();
+  const [submitting, setSubmitting] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: { name: "", organization: "", phone: "", email: "", service: "" },
   });
 
-  function onSubmit(values: FormValues) {
-    console.log("Demo request:", values);
-    toast({
-      title: "Demo Request Received!",
-      description: `Thanks ${values.name}, we'll be in touch shortly to schedule your demo.`,
-    });
-    form.reset();
-    closeModal();
+  async function onSubmit(values: FormValues) {
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${import.meta.env.BASE_URL}api/demo-request`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) throw new Error("Server error");
+      toast({
+        title: "Demo Request Sent!",
+        description: `Thanks ${values.name}, we'll be in touch shortly to schedule your demo.`,
+      });
+      form.reset();
+      closeModal();
+    } catch {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again or reach us on WhatsApp.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -232,11 +250,21 @@ export function DemoModal() {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full h-12 bg-accent hover:bg-accent/90 text-white rounded-xl text-base font-semibold mt-2"
+                      disabled={submitting}
+                      className="w-full h-12 bg-accent hover:bg-accent/90 text-white rounded-xl text-base font-semibold mt-2 disabled:opacity-70"
                       data-testid="button-submit-demo"
                     >
-                      Submit Request
-                      <ArrowRight className="w-5 h-5 ml-2" />
+                      {submitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          Submit Request
+                          <ArrowRight className="w-5 h-5 ml-2" />
+                        </>
+                      )}
                     </Button>
                   </form>
                 </Form>
