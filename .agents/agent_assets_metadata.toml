@@ -1,0 +1,14 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "30RhART4C-Gkeer-QXKRO"
+uri = "file://artifacts/ramtechnologies/src/assets/images/hero-school.jpg"
+type = "image"
+title = "african modern classroom students using laptops"
+
+[[outputs]]
+id = "w_o5obYwbjxypx3cck_Db"
+uri = "file://artifacts/ramtechnologies/src/assets/images/about-business.jpg"
+type = "image"
+title = "african business professionals collaborating in modern office"
