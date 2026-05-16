@@ -14,6 +14,21 @@ async function buildAll() {
   const distDir = path.resolve(artifactDir, "dist");
   await rm(distDir, { recursive: true, force: true });
 
+  // Serverless entry for Vercel — exports Express app without calling listen()
+  // No pino plugin needed here: production pino does not use workers
+  await esbuild({
+    entryPoints: [path.resolve(artifactDir, "src/app.ts")],
+    platform: "node",
+    bundle: true,
+    format: "cjs",
+    outfile: path.resolve(distDir, "vercel.cjs"),
+    logLevel: "info",
+    external: [
+      "*.node", "sharp", "bufferutil", "utf-8-validate", "pg-native",
+      "pino-pretty",
+    ],
+  });
+
   await esbuild({
     entryPoints: [path.resolve(artifactDir, "src/index.ts")],
     platform: "node",
